@@ -3,30 +3,59 @@ import { Todo } from '../entity/todos.entity';
 import { TodosService } from '../service/todos.service';
 import { CreateTodoInput } from '../inputs/create-todo.input';
 import { DeleteTodoInput } from '../inputs/detete-todo.input';
+import { PageLoadInput } from '../inputs/page-load.input';
+import { PaginatedTodo } from '../entity/PaginatedTodo.entity';
 
-@Resolver(()=>Todo)
+@Resolver(() => Todo)
 export class TodosResolver {
-    constructor(
-        private readonly todosService:TodosService
-    ){}
+  constructor(private readonly todosService: TodosService) {}
 
-    @Query(()=>[Todo])
-    async listTodos():Promise<Todo[]>{
-        const res = this.todosService.findAll();
-        const tasks = await res;
-        console.log(tasks);
-        return tasks;
-    }
+  @Query(() => PaginatedTodo)
+  async listTodos(@Args('input') input: PageLoadInput): Promise<PaginatedTodo> {
+    const res = await this.todosService.findAll();
+    let resQuery: Todo[] = [];
 
-    @Mutation(()=>Todo)
-    async createTodo(@Args('input') input:CreateTodoInput):Promise<Todo>{
-        return this.todosService.create(input);
+    console.log(input);
 
-    }
+    res.map((item) => {
+      if (
+        (input.query.completionStatus === 'all' ||
+          (input.query.completionStatus === 'pending' && !item.completed) ||
+          (input.query.completionStatus === 'completed' && item.completed)) &&
+        (item.title
+          .toLowerCase()
+          .includes(input.query.searchKey.toLowerCase()) ||
+          item.description
+            .toLowerCase()
+            .includes(input.query.searchKey.toLowerCase()))
+      ) {
+        resQuery.push(item);
+      }
+    });
+    // console.log(resQuery);
 
-    @Mutation(()=>Todo)
-        async DeleteTodo(@Args('input') input:DeleteTodoInput):Promise<Todo>{
-            return this.todosService.delete(input.id);
-        }
-    
+    const totalTasks = resQuery.length;
+    const pageSize = input.pageSize;
+    const pageCount = Math.ceil(totalTasks / pageSize);
+
+    const start = (input.page - 1) * pageSize;
+
+    const tasks = resQuery.slice(start, start + pageSize);
+
+    return {
+      tasks,
+      totalCount: totalTasks,
+      totalPages: pageCount,
+    };
+  }
+
+  @Mutation(() => Todo)
+  async createTodo(@Args('input') input: CreateTodoInput): Promise<Todo> {
+    return this.todosService.create(input);
+  }
+
+  @Mutation(() => Todo)
+  async DeleteTodo(@Args('input') input: DeleteTodoInput): Promise<Todo> {
+    return this.todosService.delete(input.id);
+  }
 }

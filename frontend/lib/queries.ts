@@ -1,14 +1,18 @@
 import { gql } from "graphql-request";
 
 export const GET_TODOS = gql`
-query{
-  listTodos{
+query PageLoad($input:PageLoadInput!){
+  listTodos(input:$input){
+  tasks{
     id
     title
     description
     completed
     createdAt
     updatedAt
+    }
+    totalCount
+    totalPages
   }
 }
 `
