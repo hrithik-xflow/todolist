@@ -1,21 +1,29 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Todo } from '../entity/todos.entity';
 import { TodosService } from '../service/todos.service';
 import { CreateTodoInput } from '../inputs/create-todo.input';
 import { DeleteTodoInput } from '../inputs/detete-todo.input';
 import { PageLoadInput } from '../inputs/page-load.input';
 import { PaginatedTodo } from '../entity/PaginatedTodo.entity';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { GqlAuthGuard } from 'src/auth/gql-auth.guard';
 
 @Resolver(() => Todo)
 export class TodosResolver {
   constructor(private readonly todosService: TodosService) {}
 
   @Query(() => PaginatedTodo)
-  async listTodos(@Args('input') input: PageLoadInput): Promise<PaginatedTodo> {
-    const res = await this.todosService.findAll();
+  @UseGuards(GqlAuthGuard)
+  async listTodos(
+    @Args('input') input: PageLoadInput,
+    @Context() context,
+  ): Promise<PaginatedTodo> {
+    // console.log(context.req.user);
+    const res = await this.todosService.findAll(context.req.user.id);
     let resQuery: Todo[] = [];
 
-    console.log(input);
+    // console.log(input);
 
     res.map((item) => {
       if (
@@ -50,12 +58,20 @@ export class TodosResolver {
   }
 
   @Mutation(() => Todo)
-  async createTodo(@Args('input') input: CreateTodoInput): Promise<Todo> {
-    return this.todosService.create(input);
+  @UseGuards(GqlAuthGuard)
+  async createTodo(
+    @Args('input') input: CreateTodoInput,
+    @Context() context,
+  ): Promise<Todo> {
+    return this.todosService.create(input, context.req.user.id);
   }
 
   @Mutation(() => Todo)
-  async DeleteTodo(@Args('input') input: DeleteTodoInput): Promise<Todo> {
-    return this.todosService.delete(input.id);
+  @UseGuards(GqlAuthGuard)
+  async DeleteTodo(
+    @Args('input') input: DeleteTodoInput,
+    @Context() context,
+  ): Promise<Todo> {
+    return this.todosService.delete(input.id, context.req.user.id);
   }
 }

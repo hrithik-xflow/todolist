@@ -6,6 +6,7 @@ import { redirect, useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Loading from "../../loading";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 type FormData = {
   id: String;
@@ -16,7 +17,7 @@ type FormData = {
 };
 
 export default function Page() {
-  const { data: session, status } = useSession();
+  const { data: session, status } = useSession(authOptions);
   const router = useRouter();
   let param = useParams();
   const [title, setTitle] = useState("");
@@ -27,6 +28,7 @@ export default function Page() {
   const [fetched, setFetched] = useState(false);
 
   const id = param.id;
+  // console.log(session);
 
   const {
     register,
@@ -46,7 +48,11 @@ export default function Page() {
   useEffect(() => {
     async function getData() {
       try {
-        const data = await fetch(`http://localhost:3000/todos/${id}`)
+        const data = await fetch(`http://localhost:3000/todos/${id}`, {
+          headers: {
+            Authorization: `Bearer ${session?.user?.accessToken}`,
+          },
+        })
           .then((res) => {
             if (!res.ok) return;
             return res.json();
@@ -79,7 +85,7 @@ export default function Page() {
     getData();
   }, []);
 
-  console.log(session);
+  // console.log(session);
   if (status === "loading") {
     return <Loading />;
   }
@@ -101,6 +107,7 @@ export default function Page() {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${session?.user?.accessToken}`,
         },
         body: JSON.stringify(body),
       });
@@ -109,7 +116,7 @@ export default function Page() {
         throw new Error(`Could not update the Todo`);
       }
       const result = await res.json();
-      console.log(result);
+      // console.log(result);
       router.push(`/todos/${id}`);
     } catch (error) {
       console.log(error);

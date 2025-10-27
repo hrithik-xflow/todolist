@@ -3,7 +3,7 @@ import { graphQLClient } from "@/lib/graphql-client";
 import { CREATE_TODOS } from "@/lib/queries";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-export const useCreateTodoMutation = () => {
+export const useCreateTodoMutation = (token: string) => {
   const router = useRouter();
   return useMutation({
     mutationFn: async (input: {
@@ -11,7 +11,10 @@ export const useCreateTodoMutation = () => {
       description: string;
       completed: boolean;
     }) => {
-      const res = await graphQLClient.request(CREATE_TODOS, { input });
+      if (!token) throw new Error("Missing Token");
+      console.log(input);
+      const gqc = graphQLClient(token);
+      const res = await gqc.request(CREATE_TODOS, { input });
       return res;
     },
     onSuccess: () => {

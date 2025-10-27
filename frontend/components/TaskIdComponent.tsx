@@ -1,7 +1,15 @@
+import { getServerSession } from "next-auth";
 import NotFound from "./NotFound";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 async function TaskIdComponent({ id }: { id: number }) {
-  const data = await fetch(`http://localhost:3000/todos/${id}`)
+  const session = await getServerSession(authOptions);
+  // console.log(session);
+  const data = await fetch(`http://localhost:3000/todos/${id}`, {
+    headers: {
+      Authorization: `Bearer ${session?.user?.accessToken}`,
+    },
+  })
     .then((res) => {
       if (!res.ok) throw new Error("There is an error");
       return res.json();

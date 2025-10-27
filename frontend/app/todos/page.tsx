@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { authOptions } from "../api/auth/[...nextauth]/route";
+import Loading from "./loading";
 
 export default async function Page({
   searchParams,
@@ -15,8 +16,16 @@ export default async function Page({
   const session = await getServerSession(authOptions);
 
   if (!session) redirect("/api/auth/signin");
+  // console.log(session);
 
-  console.log(session.user);
+  const token = session?.user?.accessToken;
+
+  if (!token) {
+    console.error("No JWT Token found.");
+    throw new Error("Unauthorized");
+  }
+
+  // console.log(session.user);
 
   const params = await searchParams;
 
@@ -24,10 +33,12 @@ export default async function Page({
   const search = params.search ?? "";
   const filter = params.filter ?? "all";
 
-  const data = await graphQLClient.request(GET_TODOS, {
+  const gqc = graphQLClient(token);
+
+  const data = await gqc.request(GET_TODOS, {
     input: {
       page: page,
-      pageSize: 2,
+      pageSize: 6,
       query: {
         searchKey: search,
         completionStatus: filter,

@@ -1,11 +1,10 @@
-import { Field, InputType } from "@nestjs/graphql";
-import { IsNotEmpty, IsNumber } from "class-validator";
+import { Field, InputType } from '@nestjs/graphql';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 @InputType()
-export class DeleteTodoInput{
-    @Field()
-    @IsNotEmpty()
-    @IsNumber()
-    id:number
-
+export class DeleteTodoInput {
+  @Field()
+  @IsNotEmpty()
+  @IsNumber()
+  id: number;
 }

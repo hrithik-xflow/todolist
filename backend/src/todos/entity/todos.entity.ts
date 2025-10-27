@@ -10,6 +10,10 @@ import {
 @ObjectType()
 @Entity()
 export class Todo {
+  @Field()
+  @Column()
+  userId: string;
+
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id: number;

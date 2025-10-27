@@ -1,17 +1,23 @@
 "use client";
 
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import Loading from "@/app/todos/loading";
 import { graphQLClient } from "@/lib/graphql-client";
 import { DELETE_TODOS } from "@/lib/queries";
 import { useMutation } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 function TaskIdAction({ id }: { id: number }) {
   const router = useRouter();
+  const session = useSession(authOptions);
+  // console.log(session);
 
   const deleteTodo = useMutation({
     mutationFn: async (input: { id: number }) => {
-      const res = await graphQLClient.request(DELETE_TODOS, { input });
+      const gqc = graphQLClient(session.data?.user?.accessToken);
+      const res = await gqc.request(DELETE_TODOS, { input });
       return res;
     },
     onSuccess: () => {
@@ -29,6 +35,10 @@ function TaskIdAction({ id }: { id: number }) {
       id: Number(id),
     });
   };
+
+  if (!session || session.status === "unauthenticated")
+    router.push("/api/auth/signin");
+  if (session.status === "loading") return <Loading />;
 
   return (
     <div className="flex flex-row justify-between">

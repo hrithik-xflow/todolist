@@ -4,10 +4,12 @@ import { graphQLClient } from "@/lib/graphql-client";
 import { CREATE_TODOS } from "@/lib/queries";
 import { useMutation } from "@tanstack/react-query";
 import { gql } from "graphql-request";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import Loading from "../loading";
 
 type FormData = {
   title: string;
@@ -17,8 +19,7 @@ type FormData = {
 export default function Page() {
   const [completed, setCompleted] = useState(false);
   const router = useRouter();
-
-  document.title = `Create | Todo List`;
+  const session = useSession();
 
   const {
     register,
@@ -27,15 +28,32 @@ export default function Page() {
     reset,
   } = useForm<FormData>({});
 
-  const createTodo = useCreateTodoMutation();
+  // console.log("ACCESS TOKEN:", session?.data?.user?.accessToken);
+  const createTodo = useCreateTodoMutation(session?.data?.user?.accessToken);
 
   const onSubmit = (data: FormData) => {
     createTodo.mutate({
+      // userId: session.data.user.userId,
       title: data.title,
       description: data.description,
       completed,
     });
   };
+
+  if (!session) router.push("/api/auth/signin");
+
+  if (session.status === "loading") {
+    return <Loading />;
+  }
+
+  if (session.status === "unauthenticated") {
+    router.push("/api/auth/signin");
+    return null;
+  }
+
+  document.title = `Create | Todo List`;
+
+  // console.log(session);
 
   return (
     <div>

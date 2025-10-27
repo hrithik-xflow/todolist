@@ -1,3 +1,4 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import TaskIdAction from "@/components/TaskIdAction";
 import TaskIdComponent from "@/components/TaskIdComponent";
 import { getServerSession } from "next-auth";
@@ -8,8 +9,8 @@ export default async function Page({
 }: {
   params: Promise<{ id: number }>;
 }) {
-  const session = await getServerSession();
-  console.log(session);
+  const session = await getServerSession(authOptions);
+  // console.log(session?.user);
   if (!session) redirect("/api/auth/signin");
 
   const { id } = await params;
