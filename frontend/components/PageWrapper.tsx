@@ -1,8 +1,6 @@
 "use client";
 import { TaskPayload } from "@/types/taskPayload";
 import TaskList from "./TaskList";
-import Link from "next/link";
-import Pagination from "@mui/material/Pagination";
 import { useSession } from "next-auth/react";
 
 export default function PageWrapper({ tasks }: { tasks: TaskPayload }) {

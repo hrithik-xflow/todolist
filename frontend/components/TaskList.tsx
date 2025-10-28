@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import Pagination from "@mui/material/Pagination";
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Task } from "@/types/task";
 import { TaskPayload } from "@/types/taskPayload";
 import { TaskListComp } from "./TaskListComponent";
@@ -93,7 +93,7 @@ export default function TaskList({
       {parentTasks.tasks.length == 0 ? (
         <div className="flex flex-col gap-3 text-black text-center text-xl justify-center h-[75vh]">
           <p>You have no tasks on board!</p>
-          <p>Click on "+ New Todo" to create a new task.</p>
+          <p>Click on &quot;+ New Todo&quot; to create a new task.</p>
         </div>
       ) : (
         <div className="grid lg:grid-cols-2 gap-5 ">

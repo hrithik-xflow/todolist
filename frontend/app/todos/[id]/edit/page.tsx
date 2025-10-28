@@ -2,57 +2,49 @@
 import NotFound from "@/components/NotFound";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { redirect, useParams, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Loading from "../../loading";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 type FormData = {
-  id: String;
+  id: string;
   title: string;
   description: string;
   completed: boolean;
-  updatedAt: string;
 };
 
 export default function Page() {
-  const { data: session, status } = useSession(authOptions);
+  const { data: session, status } = useSession();
   const router = useRouter();
-  let param = useParams();
+  const param = useParams();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [completed, setCompleted] = useState(false);
-  const [createdAt, setCreatedAt] = useState("");
-  const [updatedAt, setUpdatedAt] = useState("");
   const [fetched, setFetched] = useState(false);
 
   const id = param.id;
   // console.log(session);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<FormData>({
+  const { register, handleSubmit, reset } = useForm<FormData>({
     defaultValues: {
-      id: id,
       title: title,
       description: description,
       completed: completed,
-      updatedAt: updatedAt,
     },
   });
 
   useEffect(() => {
     async function getData() {
       try {
-        const data = await fetch(`http://localhost:3000/todos/${id}`, {
-          headers: {
-            Authorization: `Bearer ${session?.user?.accessToken}`,
-          },
-        })
+        const data = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/todos/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${session?.user?.accessToken}`,
+            },
+          }
+        )
           .then((res) => {
             if (!res.ok) return;
             return res.json();
@@ -66,9 +58,6 @@ export default function Page() {
         setTitle(data.title);
         setDescription(data.description);
         setCompleted(data.completed);
-        setCreatedAt(new Date(data.createdAt).toLocaleString());
-
-        setUpdatedAt(new Date(data.updatedAt).toLocaleString());
 
         document.title = `Editing: ${data.title} | Todo List`;
 
@@ -76,10 +65,9 @@ export default function Page() {
           title: data.title,
           description: data.description,
           completed: data.completed,
-          updatedAt: data.updatedAt,
         });
       } catch (error) {
-        console.error("There is an error");
+        console.error(error);
       }
     }
     getData();
@@ -96,7 +84,7 @@ export default function Page() {
   if (!session) return null;
 
   const onSubmit = async (data: FormData) => {
-    const url = `http://localhost:3000/todos/${id}`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/todos/${id}`;
     const body = {
       title: data.title,
       description: data.description,
@@ -115,8 +103,6 @@ export default function Page() {
       if (!res) {
         throw new Error(`Could not update the Todo`);
       }
-      const result = await res.json();
-      // console.log(result);
       router.push(`/todos/${id}`);
     } catch (error) {
       console.log(error);

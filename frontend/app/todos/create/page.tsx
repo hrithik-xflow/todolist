@@ -1,13 +1,9 @@
 "use client";
 import { useCreateTodoMutation } from "@/hooks/useCreateTodo";
-import { graphQLClient } from "@/lib/graphql-client";
-import { CREATE_TODOS } from "@/lib/queries";
-import { useMutation } from "@tanstack/react-query";
-import { gql } from "graphql-request";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Loading from "../loading";
 
@@ -21,15 +17,10 @@ export default function Page() {
   const router = useRouter();
   const session = useSession();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<FormData>({});
+  const { register, handleSubmit } = useForm<FormData>({});
 
   // console.log("ACCESS TOKEN:", session?.data?.user?.accessToken);
-  const createTodo = useCreateTodoMutation(session?.data?.user?.accessToken);
+  const createTodo = useCreateTodoMutation(session.data?.user?.accessToken);
 
   const onSubmit = (data: FormData) => {
     createTodo.mutate({

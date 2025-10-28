@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-function page() {
+function Page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confPassword, setConfPassword] = useState("");
@@ -87,7 +87,7 @@ function page() {
 
           <button
             className="text-blue-500 underline cursor-pointer"
-            onClick={() => router.push("/api/auth/login")}
+            onClick={() => router.push("/api/auth/signin")}
           >
             Already have an account? Login
           </button>
@@ -97,4 +97,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

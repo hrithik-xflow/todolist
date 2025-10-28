@@ -9,8 +9,9 @@ export class AuthController {
   @Post('login')
   async check(@Body() body) {
     const user = await this.authService.findOne(body.email);
-    console.log(user);
-    return user;
+    if (body.password === user.password) return user;
+    // console.log(user);
+    return null;
   }
 
   @Post('signup')

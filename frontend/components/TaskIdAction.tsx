@@ -1,6 +1,5 @@
 "use client";
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import Loading from "@/app/todos/loading";
 import { graphQLClient } from "@/lib/graphql-client";
 import { DELETE_TODOS } from "@/lib/queries";
@@ -11,7 +10,7 @@ import { useRouter } from "next/navigation";
 
 function TaskIdAction({ id }: { id: number }) {
   const router = useRouter();
-  const session = useSession(authOptions);
+  const session = useSession();
   // console.log(session);
 
   const deleteTodo = useMutation({
@@ -29,7 +28,7 @@ function TaskIdAction({ id }: { id: number }) {
   });
 
   const handleDelete = () => {
-    let choice = window.confirm(`Delete Task?`);
+    const choice = window.confirm(`Delete Task?`);
     if (!choice) return;
     deleteTodo.mutate({
       id: Number(id),

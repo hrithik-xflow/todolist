@@ -3,7 +3,7 @@ import { graphQLClient } from "@/lib/graphql-client";
 import { CREATE_TODOS } from "@/lib/queries";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-export const useCreateTodoMutation = (token: string) => {
+export const useCreateTodoMutation = (token: string | undefined) => {
   const router = useRouter();
   return useMutation({
     mutationFn: async (input: {

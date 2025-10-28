@@ -1,21 +1,26 @@
 "use client";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { Geist, Geist_Mono } from "next/font/google";
 import { useRouter } from "next/navigation";
 
-function page() {
+function Page() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPass, setShowPass] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await signIn("credentials", {
+    const res = await signIn("credentials", {
+      redirect: false,
       email,
       password,
-      callbackUrl: "/todos",
     });
+    if (res?.error) {
+      window.alert("Incorrect Credentials");
+      return;
+    }
+    router.push("/todos");
   };
 
   return (
@@ -38,12 +43,20 @@ function page() {
             </div>
             <div className="w-[100%] flex flex-col mx-30">
               <p className="text-black">Password:</p>
-              <input
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-                className="border border-gray-300 text-black px-1 w-[100%]"
-              />
+              <div className="flex flex-row gap-2">
+                <input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type={showPass ? "text" : "password"}
+                  className="border border-gray-300 text-black px-1 w-[100%]"
+                />
+                <p
+                  className="text-white cursor-pointer bg-blue-500 t px-2 py-1 rounded-full text-sm"
+                  onClick={() => setShowPass(!showPass)}
+                >
+                  {showPass ? "Hide" : "Show"}
+                </p>
+              </div>
             </div>
             <button className="text-white bg-blue-500 px-2 py-1 rounded text-md cursor-pointer">
               Sign In
@@ -98,4 +111,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

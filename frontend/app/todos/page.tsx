@@ -1,12 +1,9 @@
 import PageWrapper from "@/components/PageWrapper";
 import { graphQLClient } from "@/lib/graphql-client";
 import { GET_TODOS } from "@/lib/queries";
-import Pagination from "@mui/material/Pagination";
 import { getServerSession } from "next-auth";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { authOptions } from "../api/auth/[...nextauth]/route";
-import Loading from "./loading";
 
 export default async function Page({
   searchParams,

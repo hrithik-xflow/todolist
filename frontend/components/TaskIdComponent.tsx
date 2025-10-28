@@ -5,7 +5,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 async function TaskIdComponent({ id }: { id: number }) {
   const session = await getServerSession(authOptions);
   // console.log(session);
-  const data = await fetch(`http://localhost:3000/todos/${id}`, {
+  const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/todos/${id}`, {
     headers: {
       Authorization: `Bearer ${session?.user?.accessToken}`,
     },

@@ -1,11 +1,12 @@
-import NextAuth from "next-auth";
+import NextAuth, { Account, NextAuthOptions, Session, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import jwt from "jsonwebtoken";
+import { JWT } from "next-auth/jwt";
 
 const jwtSign = jwt.sign;
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -40,30 +41,38 @@ export const authOptions = {
     strategy: "jwt",
   },
   callbacks: {
-    async jwt({ token, account, user }) {
+    async jwt({
+      token,
+      account,
+      user,
+    }: {
+      token: JWT;
+      account?: Account | null;
+      user?: User | null;
+    }) {
       if (account && user) {
-        token.id = user.id || user.sub;
-        token.email = user.email;
-        token.name = user.name;
-        token.picture = user.image;
+        token.id = user.id || account.providerAccountId;
+        token.email = user.email ?? undefined;
+        token.name = user.name ?? undefined;
+        token.picture = user.image ?? undefined;
       }
       return token;
     },
-    async session({ session, token }) {
+
+    async session({ session, token }: { session: Session; token: JWT }) {
       session.user = {
         id: token.id,
         email: token.email,
         name: token.name,
         image: token.picture,
+        accessToken: jwtSign(token, process.env.NEXTAUTH_SECRET!),
       };
-
-      session.user.accessToken = jwtSign(token, process.env.NEXTAUTH_SECRET);
-
       return session;
     },
   },
+
   pages: {
-    signin: "/auth/signin",
+    signIn: "/auth/signin",
   },
 };
 

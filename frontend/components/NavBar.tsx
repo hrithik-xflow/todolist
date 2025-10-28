@@ -1,5 +1,4 @@
 "use client";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -8,11 +7,11 @@ import Image from "next/image";
 
 export default function NavBar() {
   const router = useRouter();
-  const session = useSession(authOptions);
+  const session = useSession();
   const [dropDown, setDropDown] = useState(false);
 
   const handleSignOut = () => {
-    let confirmation = window.confirm("Do you want to logout?");
+    const confirmation = window.confirm("Do you want to logout?");
     if (!confirmation) return;
 
     signOut({ callbackUrl: "/api/auth/signin" });
@@ -31,7 +30,7 @@ export default function NavBar() {
           <p className="text-black">{session.data?.user?.name}</p>
           <div className="flex items-center justify-center">
             <Image
-              src={session?.user?.image || image}
+              src={session?.data?.user?.image || image}
               alt="User Profile"
               width={40}
               height={40}
@@ -41,10 +40,7 @@ export default function NavBar() {
             {dropDown && (
               <div className="absolute mt-2 top-15 bg-white text-black px-3 py-3 border border-gray-200 rounded">
                 <ul>
-                  <li
-                    className="cursor-pointer"
-                    onClick={() => signOut({ callbackUrl: "/api/auth/signin" })}
-                  >
+                  <li className="cursor-pointer" onClick={handleSignOut}>
                     Logout
                   </li>
                 </ul>
