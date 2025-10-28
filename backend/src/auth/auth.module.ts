@@ -6,6 +6,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { TodosService } from 'src/todos/service/todos.service';
 import { TodosModule } from 'src/todos/module/todos.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './entity/user.entity';
 
 @Module({
   imports: [
@@ -14,10 +16,10 @@ import { TodosModule } from 'src/todos/module/todos.module';
       secret: process.env.NODE_SECRET,
       signOptions: { expiresIn: '7d' },
     }),
-    TodosModule,
+    TypeOrmModule.forFeature([User]),
   ],
   providers: [AuthService, JwtStrategy],
-  exports: [JwtStrategy],
+  exports: [JwtStrategy, AuthService],
   controllers: [AuthController],
 })
 export class AuthModule {}

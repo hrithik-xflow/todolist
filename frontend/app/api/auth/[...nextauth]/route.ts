@@ -14,17 +14,6 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        // if (
-        //   credentials?.email === "abc@gmail.com" &&
-        //   credentials.password === "123"
-        // ) {
-        //   return {
-        //     id: "1",
-        //     name: "testing123",
-        //     email: "abc@gmail.com",
-        //   };
-        // }
-        // return null;
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
           {

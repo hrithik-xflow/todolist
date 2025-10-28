@@ -59,9 +59,12 @@ export default function Page() {
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className=" flex flex-col gap-5 bg-gray-100 w-max-[80%] h-max-[80%] m-5 border border-black rounded text-black p-5">
-          <Link href={`/todos`} className="text-blue-500">
-            ← Back to Todos
-          </Link>
+          <div className="flex flex-row justify-between mx-2">
+            <p className="font-bold text-3xl">Create a new task</p>
+            <Link href={`/todos`} className="text-blue-500">
+              ← Back to Todos
+            </Link>
+          </div>
           <div className="bg-white items-center p-5">
             <div className="flex flex-col gap-5 rounded ">
               <div className="flex flex-row justify-between items-center">
@@ -91,7 +94,7 @@ export default function Page() {
                   {...register("description", {
                     required: "Description is required",
                   })}
-                  className="text-md border border-gray-500 rounded w-[70%]  text-left text-wrap px-2 py-1"
+                  className="text-md border border-gray-500 rounded w-[70%] h-[50vh] text-left text-wrap px-2 py-1"
                 />
               </div>
             </div>

@@ -3,6 +3,8 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import image from "../public/user-icon.png";
+import Image from "next/image";
 
 export default function NavBar() {
   const router = useRouter();
@@ -25,30 +27,31 @@ export default function NavBar() {
         Todo List
       </button>
       <div className="flex flex-col gap-2 justify-center items-center">
-        <img
-          src={session.data?.user?.image}
-          className="rounded-full h-10 cursor-pointer"
-          alt="User Image"
-          onClick={() => setDropDown(!dropDown)}
-        />
-        {dropDown && (
-          <div className="absolute mt-2 top-15 bg-white text-black px-3 py-3 border border-gray-200 rounded">
-            <ul>
-              <li
-                className="cursor-pointer"
-                onClick={() => signOut({ callbackUrl: "/api/auth/signin" })}
-              >
-                Logout
-              </li>
-            </ul>
+        <div className="flex flex-row gap-5 items-center">
+          <p className="text-black">{session.data?.user?.name}</p>
+          <div className="flex items-center justify-center">
+            <Image
+              src={session?.user?.image || image}
+              alt="User Profile"
+              width={40}
+              height={40}
+              className="rounded-full border border-black cursor-pointer"
+              onClick={() => setDropDown(!dropDown)}
+            />
+            {dropDown && (
+              <div className="absolute mt-2 top-15 bg-white text-black px-3 py-3 border border-gray-200 rounded">
+                <ul>
+                  <li
+                    className="cursor-pointer"
+                    onClick={() => signOut({ callbackUrl: "/api/auth/signin" })}
+                  >
+                    Logout
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
-        )}
-        {/* <button
-          className="text-lg font-mono text-blue-500 font-bold cursor-pointer"
-          onClick={handleSignOut}
-        >
-          Logout
-        </button> */}
+        </div>
       </div>
     </div>
   );
