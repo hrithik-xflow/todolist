@@ -91,28 +91,30 @@ export default function TaskList({
         </Link>
       </div>
       {parentTasks.tasks.length == 0 ? (
-        <div className="flex flex-col gap-3 text-black text-center text-xl justify-center h-[75vh]">
+        <div className="flex flex-col gap-3 text-black text-center text-xl h-[50vh] items-center justify-center">
           <p>You have no tasks on board!</p>
           <p>Click on &quot;+ New Todo&quot; to create a new task.</p>
         </div>
       ) : (
-        <div className="grid lg:grid-cols-2 gap-5 ">
-          {parentTasks.tasks.map((item: Task) => {
-            {
-              return (
-                <Link href={`/todos/${item.id}`} key={item.id}>
-                  <TaskListComp item={item} />
-                </Link>
-              );
-            }
-          })}
+        <div className="flex flex-col gap-5">
+          <div className="grid lg:grid-cols-2 gap-5 ">
+            {parentTasks.tasks.map((item: Task) => {
+              {
+                return (
+                  <Link href={`/todos/${item.id}`} key={item.id}>
+                    <TaskListComp item={item} />
+                  </Link>
+                );
+              }
+            })}
+          </div>
+          <Pagination
+            page={page}
+            onChange={handlePageChange}
+            count={parentTasks.totalPages}
+          />
         </div>
       )}
-      <Pagination
-        page={page}
-        onChange={handlePageChange}
-        count={parentTasks.totalPages}
-      />
     </div>
   );
 }

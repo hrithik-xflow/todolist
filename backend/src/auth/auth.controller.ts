@@ -16,13 +16,13 @@ export class AuthController {
 
   @Post('signup')
   async signup(@Body() body) {
-    console.log(body);
+    // console.log(body);
     const user = await this.authService.add({
       email: body.email,
       password: body.password,
       name: body.name,
     });
-
+    // console.log(user);
     return user;
   }
 }
