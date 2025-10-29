@@ -115,7 +115,7 @@ export default function Page() {
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className=" flex flex-col gap-5 bg-gray-100 w-max-[80%] h-max-[80%] m-5 border border-black rounded text-black p-5">
-          <Link href={`/todos`} className="text-blue-500">
+          <Link href={`/todos`} className="text-blue-500 text-sm sm:text-md">
             ← Back to Todos
           </Link>
           <div className="bg-white items-center p-5">
@@ -124,14 +124,14 @@ export default function Page() {
                 <div className="flex flex-col gap-5 items-start w-[70%]">
                   <input
                     {...register("title", { required: "Title is required" })}
-                    className="font-bold text-3xl border rounded border-gray-500 w-[100%] px-2 py-1"
+                    className="font-bold text-xl sm:text-2xl md:text-3xl border rounded border-gray-500 w-[100%] px-2 py-1"
                   />
-                  <div className="flex flex-row gap-2 justify-center">
+                  <div className="flex flex-row gap-2 text-xs sm:text-sm md:text-md justify-center items-center">
                     <p>Completion Status: </p>
                     <button
                       type="button"
                       onClick={() => setCompleted(!completed)}
-                      className={`text-sm px-2 py-1 rounded cursor-pointer ${
+                      className={`text-xs sm:text-sm md:text-md px-2 py-1 rounded cursor-pointer ${
                         completed === true
                           ? `bg-green-100 text-green-500`
                           : `bg-red-100 text-red-500`
@@ -148,20 +148,20 @@ export default function Page() {
                   {...register("description", {
                     required: "Description is required",
                   })}
-                  className="w-[100%] h-[55vh] resize-none overflow-y-auto p-5 border border-gray-500 rounded"
+                  className="w-[100%] h-[55vh] resize-none overflow-y-auto p-5 border border-gray-500 text-xs sm:text-sm md:text-md lg:text-lg rounded"
                 />
               </div>
             </div>
             <div className="flex flex-row gap-2">
               <button
                 type="submit"
-                className="text-white px-5 py-1 bg-blue-500 rounded cursor-pointer"
+                className="text-white px-5 py-1 bg-blue-500 rounded px-2 cursor-pointer text-sm sm:text-md"
               >
                 Update
               </button>
               <Link
                 href={`/todos/${id}`}
-                className="text-black px-5 py-1 bg-gray-200 rounded cursor-pointer"
+                className="text-black px-5 py-1 bg-blue-200 rounded px-2 cursor-pointer text-sm sm:text-md"
               >
                 Cancel
               </Link>

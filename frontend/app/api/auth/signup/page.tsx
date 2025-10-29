@@ -58,21 +58,23 @@ function Page() {
 
   return (
     <div className="flex justify-center items-center h-[100vh] bg-[url('/bg1.jpg')] bg-cover bg-gray-50">
-      <div className="flex border border-gray-200 shadow-md rounded-lg bg-white h-[60vh] items-center justify-center flex-col gap-12 w-[80%] lg:w-[50%] md:w-[70%] sm:w-[90%]">
-        <p className={`text-blue-700 text-4xl font-bold font-mono`}>
+      <div className="flex border border-gray-200 shadow-md rounded-lg bg-white h-[70%] sm:[80%] md:[90%]  items-center justify-center flex-col gap-10 w-[70%] lg:w-[50%] md:w-[70%] sm:w-[90%]">
+        <p
+          className={`text-blue-700 text-2xl sm:text-3xl md:text-4xl font-bold font-mono`}
+        >
           Todo List
         </p>
-        <div className="flex flex-col gap-5 w-[70%] items-center">
+        <div className="flex flex-col gap-2 sm:gap-3 md:gap-4 lg:gap-5 w-[70%] items-center">
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col items-center gap-3"
+            className="flex flex-col items-center gap-1 sm:gap-2 md:gap-3 w-[100%]"
           >
             <div className="w-[100%] flex flex-col mx-30">
               <p className="text-black">Name:</p>
               <input
                 onChange={(e) => setName(e.target.value)}
                 type="text"
-                className="border border-gray-300 rounded text-black px-1 w-[100%] h-8"
+                className="border border-gray-300 rounded text-black px-1 w-[100%] h-6 sm:h-7 md:h-8"
               />
             </div>
             <div className="w-[100%] flex flex-col mx-30">
@@ -80,7 +82,7 @@ function Page() {
               <input
                 onChange={(e) => setEmail(e.target.value)}
                 type="email"
-                className="border border-gray-300 rounded text-black px-1 w-[100%] h-8"
+                className="border border-gray-300 rounded text-black px-1 w-[100%] h-6 sm:h-7 md:h-8"
               />
             </div>
             <div className="w-[100%] flex flex-col mx-30">
@@ -89,10 +91,10 @@ function Page() {
                 <input
                   onChange={(e) => setPassword(e.target.value)}
                   type={show1 ? "text" : "password"}
-                  className="border border-gray-300 rounded text-black px-1 w-[100%] h-8"
+                  className="border border-gray-300 rounded text-black px-1 w-[100%] h-6 sm:h-7 md:h-8"
                 />
                 <p
-                  className="text-white cursor-pointer bg-blue-500 px-2 py-1 rounded-full text-sm"
+                  className="text-white cursor-pointer bg-blue-500 px-2 py-1 rounded-full text-xs sm:text-sm"
                   onClick={() => setShow1(!show1)}
                 >
                   {show1 ? "Hide" : "Show"}
@@ -105,10 +107,10 @@ function Page() {
                 <input
                   onChange={(e) => setConfPassword(e.target.value)}
                   type={show2 ? "text" : "password"}
-                  className="border border-gray-300 rounded text-black px-1 w-[100%] h-8"
+                  className="border border-gray-300 rounded text-black px-1 w-[100%] h-6 sm:h-7 md:h-8"
                 />
                 <p
-                  className="text-white cursor-pointer bg-blue-500 px-2 py-1 rounded-full text-sm"
+                  className="text-white cursor-pointer bg-blue-500 px-2 py-1 rounded-full text-xs sm:text-sm"
                   onClick={() => setShow2(!show2)}
                 >
                   {show2 ? "Hide" : "Show"}
@@ -117,15 +119,14 @@ function Page() {
             </div>
             <button
               type="submit"
-              className="text-white bg-blue-500 px-2 py-1 mt-3 rounded text-md cursor-pointer"
-              // onClick={handleSubmit}
+              className="text-white bg-blue-500 px-5 py-1 rounded text-sm sm:text-md cursor-pointer mt-3" // onClick={handleSubmit}
             >
               Create Account
             </button>
           </form>
 
           <button
-            className="text-blue-500 underline cursor-pointer"
+            className="text-blue-500 underline cursor-pointer text-xs sm:text-sm"
             onClick={() => router.push("/api/auth/signin")}
           >
             Already have an account? Login

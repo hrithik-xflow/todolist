@@ -40,19 +40,19 @@ function TaskIdAction({ id }: { id: number }) {
   if (session.status === "loading") return <Loading />;
 
   return (
-    <div className="flex flex-row justify-between">
-      <Link href={`/todos`} className="text-blue-500">
+    <div className="flex flex-row justify-between items-center">
+      <Link href={`/todos`} className="text-blue-500 text-sm sm:text-md">
         ← Back to Todos
       </Link>
       <div className="flex flex-row gap-2">
         <Link
           href={`/todos/${id}/edit`}
-          className="text-white px-5 py-1 bg-blue-500 rounded px-2 cursor-pointer"
+          className="text-white px-5 py-1 bg-blue-500 rounded px-2 cursor-pointer text-sm sm:text-md"
         >
           Edit
         </Link>
         <p
-          className="text-white px-5 py-1 bg-red-500 rounded px-2 cursor-pointer"
+          className="text-white px-5 py-1 bg-red-500 rounded px-2 cursor-pointer text-sm sm:text-md"
           onClick={handleDelete}
         >
           Delete

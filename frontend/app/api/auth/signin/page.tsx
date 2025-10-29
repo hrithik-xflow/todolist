@@ -25,22 +25,24 @@ function Page() {
 
   return (
     <div className="flex justify-center items-center h-[100vh] bg-[url('/bg1.jpg')] bg-cover">
-      <div className="flex border border-gray-200 shadow-md rounded-lg bg-white h-[60%] items-center justify-center flex-col gap-12 w-[80%] lg:w-[50%] md:w-[70%] sm:w-[90%]">
-        <p className={`text-blue-700 text-4xl font-bold font-mono`}>
+      <div className="flex border border-gray-200 shadow-md rounded-lg bg-white h-[70%] sm:[80%] md:[90%]  items-center justify-center flex-col gap-10 w-[70%] lg:w-[50%] md:w-[70%] sm:w-[90%]">
+        <p
+          className={`text-blue-700 text-2xl sm:text-3xl md:text-4xl font-bold font-mono`}
+        >
           Todo List
         </p>
-        <div className="flex flex-col gap-5 w-[70%] items-center">
+        <div className="flex flex-col gap-3 sm:gap-1 md:gap-2 lg:gap-3 w-[70%] items-center">
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col items-center gap-5"
+            className="flex flex-col items-center gap-5 w-[100%]"
           >
             <div className="w-[100%] flex flex-col mx-30">
-              <p className="text-black">Email:</p>
+              <p className="text-black ">Email:</p>
               <input
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 type="email"
-                className="border border-gray-300 rounded text-black px-1 w-[100%] h-8"
+                className="border border-gray-300 rounded text-black px-1 w-[100%] h-6 sm:h-7 md:h-8"
               />
             </div>
             <div className="w-[100%] flex flex-col mx-30">
@@ -50,36 +52,36 @@ function Page() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   type={showPass ? "text" : "password"}
-                  className="border border-gray-300 rounded text-black px-1 w-[100%] h-8"
+                  className="border border-gray-300 rounded text-black px-1 w-[100%] h-6 sm:h-7 md:h-8"
                 />
                 <p
-                  className="text-white cursor-pointer bg-blue-500 t px-2 py-1 rounded-full text-sm"
+                  className="text-white cursor-pointer bg-blue-500 t px-2 py-1 rounded-full text-xs sm:text-sm"
                   onClick={() => setShowPass(!showPass)}
                 >
                   {showPass ? "Hide" : "Show"}
                 </p>
               </div>
             </div>
-            <button className="text-white bg-blue-500 px-5 py-1 rounded text-md cursor-pointer">
+            <button className="text-white bg-blue-500 px-5 py-1 rounded text-sm sm:text-md cursor-pointer">
               Sign In
             </button>
           </form>
 
           <button
-            className="text-blue-500 underline cursor-pointer"
+            className="text-blue-500 underline cursor-pointer text-xs sm:text-sm"
             onClick={() => router.push("/api/auth/signup")}
           >
             Dont have an account? Sign Up
           </button>
 
-          <p className="text-black">Or login with </p>
+          <p className="text-black text-sm sm:text-md">Or login with </p>
 
           <button
             onClick={() => signIn("google", { callbackUrl: "/todos" })}
             type="submit"
-            className="flex items-center cursor-pointer px-4 py-2 border border-gray-300 rounded-md shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 transition"
+            className="flex items-center cursor-pointer px-4 py-2 border border-gray-300 rounded-full shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-blue-500 transition"
           >
-            <div className="w-6 h-6 mr-3">
+            <div className="w-3 h-3 mr-3">
               <svg
                 viewBox="0 0 48 48"
                 xmlns="http://www.w3.org/2000/svg"

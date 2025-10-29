@@ -20,20 +20,22 @@ export default function NavBar() {
   return (
     <div className="w-[100%] py-5 flex flex-row justify-between px-10 border border-b bg-white h-20">
       <button
-        className="text-2xl font-bold font-mono text-blue-500 cursor-pointer"
+        className="text-lg sm:text-xl md:text-2xl font-bold font-mono text-blue-500 cursor-pointer"
         onClick={() => router.push("/todos")}
       >
         Todo List
       </button>
       <div className="flex flex-col gap-2 justify-center items-center">
         <div className="flex flex-row gap-5 items-center">
-          <p className="text-black">{session.data?.user?.name}</p>
+          <p className="text-black text-sm sm:text-md md:text-lg">
+            {session.data?.user?.name}
+          </p>
           <div className="flex items-center justify-center">
             <Image
               src={session?.data?.user?.image || image}
               alt="User Profile"
-              width={40}
-              height={40}
+              width={30}
+              height={30}
               className="rounded-full border border-black cursor-pointer"
               onClick={() => setDropDown(!dropDown)}
             />

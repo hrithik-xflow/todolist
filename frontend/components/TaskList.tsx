@@ -19,6 +19,7 @@ export default function TaskList({
   const [isMounted, setIsMounted] = useState(false);
 
   const page = searchParams.get("page") ? Number(searchParams.get("page")) : 1;
+  const [isMobile, setIsMobile] = useState(false);
 
   const createQueryString = (name: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -53,13 +54,20 @@ export default function TaskList({
       router.push("/todos");
   }, [page, parentTasks.totalPages, router]);
 
+  useEffect(() => {
+    const checkWidth = () => setIsMobile(window.outerWidth < 800);
+    checkWidth(); // run initially
+    window.addEventListener("resize", checkWidth);
+    return () => window.removeEventListener("resize", checkWidth);
+  }, []);
+
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-row gap-5 justify-between items-center">
-        <div className="flex flex-row gap-5 w-[50%] sm:w-[60%] md:w-[70%] lg:w-[80%] ">
+        <div className="flex flex-row gap-5 w-[80%] sm:w-[60%] md:w-[70%] lg:w-[80%] ">
           <input
             type="text"
-            className="border border-gray-500 rounded w-[30%]  text-black px-2 py-1"
+            className="border border-gray-500 rounded w-[100%] text-xs sm:text-sm text-black px-2 py-1"
             onChange={(e) => {
               setIsMounted(true);
               setQuery(e.target.value);
@@ -70,7 +78,7 @@ export default function TaskList({
             name="taskSelect"
             id="taskSelect"
             aria-label="TaskList"
-            className="border border-gray-500 rounded text-black px-2 py-1"
+            className="border border-gray-500 rounded text-black px-2 py-1 w-[50%] text-xs sm:text-sm"
             defaultValue={"all"}
             onChange={(e) => {
               router.push(
@@ -85,9 +93,9 @@ export default function TaskList({
         </div>
         <Link
           href={`/todos/create`}
-          className="text-white bg-blue-500 rounded px-3 py-2 cursor-pointer"
+          className="text-white bg-blue-500 rounded px-3 py-2 cursor-pointer text-center items-center"
         >
-          + New Todo
+          {isMobile ? "+" : "+ New Todo"}
         </Link>
       </div>
       {parentTasks.tasks.length == 0 ? (
@@ -97,7 +105,7 @@ export default function TaskList({
         </div>
       ) : (
         <div className="flex flex-col gap-5">
-          <div className="grid lg:grid-cols-2 gap-5 ">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 ">
             {parentTasks.tasks.map((item: Task) => {
               {
                 return (
